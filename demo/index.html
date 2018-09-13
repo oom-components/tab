@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@oom/tab Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style type="text/css">
+        html {
+            font-family: -apple-system, system-ui, sans-serif;
+        }
+
+        section:not(:target) {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Demo tab</h1>
+
+    <div>
+        <oom-tab role="region">
+            <ul role="tablist">
+                <li role="presentation">
+                    <a href="#section1" role="tab" id="tab1" aria-selected="true">
+                        Section 1
+                    </a>
+                </li>
+                <li role="presentation">
+                    <a href="#section2" role="tab" id="tab2">
+                        Section 2
+                    </a>
+                </li>
+                <li role="presentation">
+                    <a href="#section3" role="tab" id="tab3">
+                        Section 3
+                    </a>
+                </li>
+            </ul>
+
+            <section id="section1" aria-labelledby="tab1" role="tabpanel">
+                <h2>Section 1</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam euismod, tortor nec pharetra ultricies, ante erat imperdiet velit, nec laoreet enim lacus a velit. Nam luctus, enim in interdum condimentum, nisl diam iaculis lorem, vel volutpat mi leo sit amet lectus. Praesent non odio bibendum magna bibendum accumsan.</p>
+            </section>
+
+            <section id="section2" aria-labelledby="tab2" role="tabpanel">
+                <h2>Section 2</h2>
+                <p>Nullam at diam nec arcu suscipit auctor non a erat. Sed et magna semper, eleifend magna non, facilisis nisl. Proin et est et lorem dictum finibus ut nec turpis. Aenean nisi tortor, euismod a mauris a, mattis scelerisque tortor. Sed dolor risus, varius a nibh id, condimentum lacinia est. In lacinia cursus odio a aliquam. Curabitur tortor magna, laoreet ut rhoncus at, sodales consequat tellus.</p>
+            </section>
+
+            <section id="section3" aria-labelledby="tab3" role="tabpanel">
+                <h2>Section 3</h2>
+                <p>Phasellus ac tristique orci. Nulla maximus justo nec dignissim consequat. Sed vehicula diam sit amet mi efficitur vehicula in in nisl. Aliquam erat volutpat. Suspendisse lorem turpis, accumsan consequat consectetur gravida, pellentesque ac ante. Aliquam in commodo ligula, sit amet mollis neque. Vestibulum at facilisis massa.</p>
+            </section>
+        </oom-tab>
+    </div>
+
+    <script type="text/javascript" src="https://unpkg.com/@webcomponents/webcomponentsjs@2.0.3/webcomponents-bundle.js"></script>
+    <script type="module" src="script.js" async></script>
+</body>
+</html>

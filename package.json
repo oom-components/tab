@@ -1,0 +1,36 @@
+{
+  "name": "@oom/tab",
+  "version": "1.0.0",
+  "description": "Tab panel with progressive enhancement in mind",
+  "browser": "src/tab.js",
+  "modules.root": "src",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "start": "http-server -c-1",
+    "prettier": "prettier src/*.js demo/*.js tests/*.js --single-quote --tab-width 4 --write"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oom-components/tab.git"
+  },
+  "keywords": [
+    "progressive",
+    "web",
+    "component",
+    "tab",
+    "custom element",
+    "es6"
+  ],
+  "author": "Oscar Otero <oom@oscarotero.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/oom-components/tab/issues"
+  },
+  "homepage": "https://github.com/oom-components/tab#readme",
+  "devDependencies": {
+    "http-server": "^0.11.1",
+    "prettier": "^1.14.2"
+  }
+}
