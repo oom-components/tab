@@ -8,17 +8,18 @@ export default class Tab extends HTMLElement {
     }
 
     connectedCallback() {
-        this.tablist = this.querySelector(':scope > [role="tablist"]');
+        this.tablist = this.querySelector('[role="tablist"]');
         this.tabs = this.tablist.querySelectorAll('a[role="tab"]');
-        this.panels = this.querySelectorAll(':scope [role="tabpanel"]');
+        this.panels = this.querySelectorAll('[role="tabpanel"]');
 
         this.tabs.forEach(tab => {
             tab.addEventListener('click', e => {
                 e.preventDefault();
-                const currentTab = tablist.querySelector('[aria-selected]');
-                if (e.currentTarget !== currentTab) {
-                    switchTab(currentTab, e.currentTarget);
-                }
+                switchTab(
+                    tab.getAttribute('href').substr(1),
+                    this.tabs,
+                    this.panels
+                );
             });
         });
     }
@@ -29,22 +30,31 @@ export default class Tab extends HTMLElement {
         }
     }
 
-    get index() {
+    get tabId() {
+
     }
 
-    set index(index) {
+    set tabId(id) {
     }
 }
 
-function switchTab (oldTab, newTab, panels) {
-    newTab.focus();
-    newTab.removeAttribute('tabindex');
-    newTab.setAttribute('aria-selected', 'true');
+function switchTab(id, tabs, panels) {
+    const hash = `#${id}`;
 
-    oldTab.removeAttribute('aria-selected');
-    oldTab.setAttribute('tabindex', '-1');
+    tabs.forEach(tab => {
+        if (tab.getAttribute('href') === hash) {
+            tab.focus();
+            tab.removeAttribute('tabindex');
+            tab.setAttribute('aria-selected', 'true');
+        } else {
+            tab.removeAttribute('aria-selected');
+            tab.setAttribute('tabindex', '-1');
+        }
+    });
 
-    const id = newTab.getAttribute('href').substr(1);
+    panels.forEach(panel => {
+        panel.hidden = (id !== panel.id);
+    });
 
-    panels.forEach(panel => panel.hidden = id !== panel.id);
+    history.replaceState({}, '', hash);
 }

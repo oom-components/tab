@@ -12,6 +12,24 @@
         section:not(:target) {
             display: none;
         }
+        section:not([hidden]) {
+            display: block;
+        }
+
+        ul[role="tablist"] {
+            display: flex;
+            list-style: none;
+            padding: 0;
+        }
+        ul[role="tablist"] a {
+            display: block;
+            padding: 1em;
+            background: #ddd;
+        }
+        a[role="tab"][aria-selected="true"] {
+            background: black;
+            color: white;
+        }
     </style>
 </head>
 
