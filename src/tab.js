@@ -12,16 +12,106 @@ export default class Tab extends HTMLElement {
         this.tabs = this.tablist.querySelectorAll('a[role="tab"]');
         this.panels = this.querySelectorAll('[role="tabpanel"]');
 
-        this.tabs.forEach(tab => {
+        this.tabs.forEach((tab, index) => {
             tab.addEventListener('click', e => {
                 e.preventDefault();
                 switchTab(
-                    tab.getAttribute('href').substr(1),
+                    tab,
                     this.tabs,
                     this.panels
                 );
             });
+
+            tab.addEventListener('keydown', e => {
+                switch (e.which) {
+                    case 37: //left
+                        if (this.tabs[index - 1]) {
+                            e.preventDefault();
+                            switchTab(
+                                this.tabs[index - 1],
+                                this.tabs,
+                                this.panels
+                            );
+                        }
+                        break;
+
+                    case 39: //right
+                        if (this.tabs[index + 1]) {
+                            e.preventDefault();
+                            switchTab(
+                                this.tabs[index + 1],
+                                this.tabs,
+                                this.panels
+                            );
+                        }
+                        break;
+
+                    case 40: //down
+                        e.preventDefault();
+                        const id = tab.getAttribute('href').substr(1);
+
+                        this.panels.forEach(panel => {
+                            if (panel.id === id) {
+                                panel.focus();
+                            }
+                        });
+                        break;
+                }
+            });
+
+            if (tab.getAttribute('aria-selected') === 'true') {
+                switchTab(
+                    tab,
+                    this.tabs,
+                    this.panels
+                );
+            }
         });
+
+        this.panels.forEach(panel => {
+            panel.setAttribute('tabindex', '-1');
+
+            panel.addEventListener('keydown', e => {
+                if (e.which == 38) { //top
+                    e.preventDefault();
+                    const hash = `#${panel.id}`;
+
+                    this.tabs.forEach(tab => {
+                        if (tab.getAttribute('href') === hash) {
+                            tab.focus();
+                        }
+                    });
+                }
+            });
+
+            if (panel.matches(':target')) {
+                const hash = `#${panel.id}`;
+                this.tabs.forEach(tab => {
+                    if (tab.getAttribute('href') === hash) {
+                        switchTab(
+                            tab,
+                            this.tabs,
+                            this.panels
+                        );
+                    }
+                });
+
+            }
+        });
+
+        window.addEventListener('popstate', e => {
+            const hash = document.location.hash;
+
+            this.tabs.forEach(tab => {
+                if (tab.getAttribute('href') === hash) {
+                    switchTab(
+                        tab,
+                        this.tabs,
+                        this.panels
+                    );
+                }
+            });
+        })
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -38,11 +128,9 @@ export default class Tab extends HTMLElement {
     }
 }
 
-function switchTab(id, tabs, panels) {
-    const hash = `#${id}`;
-
+function switchTab(newTab, tabs, panels) {
     tabs.forEach(tab => {
-        if (tab.getAttribute('href') === hash) {
+        if (tab === newTab) {
             tab.focus();
             tab.removeAttribute('tabindex');
             tab.setAttribute('aria-selected', 'true');
@@ -52,9 +140,10 @@ function switchTab(id, tabs, panels) {
         }
     });
 
-    panels.forEach(panel => {
-        panel.hidden = (id !== panel.id);
-    });
+    const hash = newTab.getAttribute('href');
+    const id = hash.substr(1);
+
+    panels.forEach(panel => panel.style.display = (id === panel.id) ? 'block' : 'none');
 
     history.replaceState({}, '', hash);
 }
