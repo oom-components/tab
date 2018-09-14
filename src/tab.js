@@ -8,63 +8,34 @@ export default class Tab extends HTMLElement {
     }
 
     connectedCallback() {
-        this.tablist = this.querySelector('[role="tablist"]');
-        this.tabs = this.tablist.querySelectorAll('a[role="tab"]');
-        this.panels = this.querySelectorAll('[role="tabpanel"]');
+        this.tabs = Array.from(this.querySelectorAll('[role="tab"]'));
+        this.panels = Array.from(this.querySelectorAll('[role="tabpanel"]'));
 
-        this.tabs.forEach((tab, index) => {
+        this.tabs.forEach(tab => {
             tab.addEventListener('click', e => {
                 e.preventDefault();
-                switchTab(
-                    tab,
-                    this.tabs,
-                    this.panels
-                );
+                this.tab = tab;
             });
 
             tab.addEventListener('keydown', e => {
                 switch (e.which) {
                     case 37: //left
-                        if (this.tabs[index - 1]) {
-                            e.preventDefault();
-                            switchTab(
-                                this.tabs[index - 1],
-                                this.tabs,
-                                this.panels
-                            );
-                        }
+                        this.index -= 1;
                         break;
 
                     case 39: //right
-                        if (this.tabs[index + 1]) {
-                            e.preventDefault();
-                            switchTab(
-                                this.tabs[index + 1],
-                                this.tabs,
-                                this.panels
-                            );
-                        }
+                        this.index += 1;
                         break;
 
                     case 40: //down
                         e.preventDefault();
-                        const id = tab.getAttribute('href').substr(1);
-
-                        this.panels.forEach(panel => {
-                            if (panel.id === id) {
-                                panel.focus();
-                            }
-                        });
+                        this.panel.focus();
                         break;
                 }
             });
 
             if (tab.getAttribute('aria-selected') === 'true') {
-                switchTab(
-                    tab,
-                    this.tabs,
-                    this.panels
-                );
+                this.tab = tab;
             }
         });
 
@@ -74,44 +45,23 @@ export default class Tab extends HTMLElement {
             panel.addEventListener('keydown', e => {
                 if (e.which == 38) { //top
                     e.preventDefault();
-                    const hash = `#${panel.id}`;
-
-                    this.tabs.forEach(tab => {
-                        if (tab.getAttribute('href') === hash) {
-                            tab.focus();
-                        }
-                    });
+                    this.tab.focus();
                 }
             });
 
             if (panel.matches(':target')) {
-                const hash = `#${panel.id}`;
-                this.tabs.forEach(tab => {
-                    if (tab.getAttribute('href') === hash) {
-                        switchTab(
-                            tab,
-                            this.tabs,
-                            this.panels
-                        );
-                    }
-                });
-
+                this.panel = panel;
             }
         });
 
         window.addEventListener('popstate', e => {
             const hash = document.location.hash;
+            const tab = this.tabs.find(tab => tab.getAttribute('href') === hash);
 
-            this.tabs.forEach(tab => {
-                if (tab.getAttribute('href') === hash) {
-                    switchTab(
-                        tab,
-                        this.tabs,
-                        this.panels
-                    );
-                }
-            });
-        })
+            if (tab) {
+                this.tab = tab;
+            }
+        });
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -120,30 +70,56 @@ export default class Tab extends HTMLElement {
         }
     }
 
-    get tabId() {
-
+    get index() {
+        return this.tabs.findIndex(tab => tab.getAttribute('aria-selected') === 'true');
     }
 
-    set tabId(id) {
-    }
-}
-
-function switchTab(newTab, tabs, panels) {
-    tabs.forEach(tab => {
-        if (tab === newTab) {
-            tab.focus();
-            tab.removeAttribute('tabindex');
-            tab.setAttribute('aria-selected', 'true');
-        } else {
-            tab.removeAttribute('aria-selected');
-            tab.setAttribute('tabindex', '-1');
+    set index(index) {
+        if (this.tabs[index]) {
+            this.tab = this.tabs[index];
         }
-    });
+    }
 
-    const hash = newTab.getAttribute('href');
-    const id = hash.substr(1);
+    get tab() {
+        return this.tabs.find(tab => tab.getAttribute('aria-selected') === 'true');
+    }
 
-    panels.forEach(panel => panel.style.display = (id === panel.id) ? 'block' : 'none');
+    set tab(tab) {
+        const oldTab = this.tab;
 
-    history.replaceState({}, '', hash);
+        if (oldTab) {
+            oldTab.removeAttribute('aria-selected');
+            oldTab.setAttribute('tabindex', '-1');
+        }
+
+        tab.focus();
+        tab.removeAttribute('tabindex');
+        tab.setAttribute('aria-selected', 'true');
+
+        const hash = tab.getAttribute('href');
+        const id = hash.substr(1);
+
+        this.panels.forEach(panel => panel.style.display = (id === panel.id) ? 'block' : 'none');
+
+        history.replaceState({}, '', hash);
+    }
+
+    get panel() {
+        const tab = this.tab;
+
+        if (tab) {
+            const id = tab.getAttribute('href').substr(1);
+
+            return this.panels.find(panel => panel.id === id);
+        }
+    }
+
+    set panel(panel) {
+        const href = `#${panel.id}`;
+        const tab = this.tabs.find(tab => tab.getAttribute('href') === href);
+
+        if (tab) {
+            this.tab = tab;
+        }
+    }
 }
