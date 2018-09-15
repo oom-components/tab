@@ -33,14 +33,17 @@ export default class Tab extends HTMLElement {
             panel.setAttribute('tabindex', '-1');
 
             panel.addEventListener('keydown', e => {
-                if (e.which == 38) { //top
+                if (e.which == 38) {
+                    //top
                     e.preventDefault();
                     this.tab.focus();
                 }
             });
         });
 
-        window.addEventListener('popstate', () => setByHash(this, document.location.hash));
+        window.addEventListener('popstate', () =>
+            setByHash(this, document.location.hash)
+        );
 
         if (!setByHash(this, document.location.hash)) {
             setTab(this, this.tab);
@@ -48,7 +51,9 @@ export default class Tab extends HTMLElement {
     }
 
     get tab() {
-        return this.tabs.find(tab => tab.getAttribute('aria-selected') === 'true');
+        return this.tabs.find(
+            tab => tab.getAttribute('aria-selected') === 'true'
+        );
     }
 
     get panel() {
@@ -97,7 +102,9 @@ function setTab(el, tab) {
     const hash = tab.getAttribute('href');
     const id = hash.substr(1);
 
-    el.panels.forEach(panel => panel.style.display = (id === panel.id) ? 'block' : 'none');
+    el.panels.forEach(
+        panel => (panel.style.display = id === panel.id ? 'block' : 'none')
+    );
     history.replaceState({}, '', hash);
 }
 
@@ -133,7 +140,7 @@ function checkA11y(element) {
                     'The li elements in ul[role="tablist"] should have the role="presentation" attribute'
                 );
             }
-        })
+        });
 
         tablist.querySelectorAll('a').forEach(a => {
             if (a.getAttribute('role') !== 'tab') {
@@ -142,7 +149,7 @@ function checkA11y(element) {
                     'The a elements in ul[role="tablist"] must have the role="tab" attribute'
                 );
             }
-        })
+        });
     }
 
     const panels = element.querySelectorAll('[role="tabpanel"]');
