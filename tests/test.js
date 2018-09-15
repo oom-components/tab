@@ -1,140 +1,47 @@
-import Carousel from '../src/carousel.js';
-import Player from '../src/player.js';
+import Tab from '../src/tab.js';
 
-customElements.define('test-carousel', Carousel);
+customElements.define('test-tab', Tab);
 
 const expect = chai.expect;
-const carousel = document.querySelector('test-carousel');
-console.log(carousel);
+const tab = document.querySelector('test-tab');
+console.log(tab);
 mocha.setup('bdd');
 
-describe('Carousel testing', function() {
+describe('Tab testing', function() {
     context('Init', function() {
-        it('the container cannot have position static', function() {
-            const position = getComputedStyle(carousel).position;
-            expect(carousel).not.to.equal('static');
+        it('Select tabs and panels', function() {
+            expect(tab.panels.length).to.equal(2);
+            expect(tab.tabs.length).to.equal(2);
         });
 
-        it('has horizontal scroll to 0', function() {
-            expect(carousel.scrollLeft).to.equal(0);
-            expect(carousel.scrollFromLeft).to.equal(0);
-            expect(carousel.index).to.equal(0);
+        it('the first tab is selected by default', function() {
+            expect(tab.panel.id).to.equal('section1');
+            expect(tab.panels[0] === tab.panel).to.be.true;
+            expect(tab.tab.id).to.equal('tab1');
+            expect(tab.tabs[0] === tab.tab).to.be.true;
         });
 
-        it('checks scroll status', function() {
-            expect(carousel.scrollFromLeft === 0).to.be.true;
-            expect(carousel.scrollFromRight === 0).to.be.false;
-        });
-    });
-
-    context('Move', function() {
-        //Disable smooth
-        carousel.scrollBehavior = 'auto';
-
-        it('goes to the end', function() {
-            carousel.index = carousel.children.length - 1;
-
-            expect(carousel.scrollFromLeft === 0).to.be.false;
-            expect(carousel.scrollFromRight === 0).to.be.true;
-            expect(carousel.index).to.equal(9);
-        });
-
-        it('moves -1', function() {
-            carousel.index -= 1;
-
-            expect(carousel.scrollFromLeft === 0).to.be.false;
-            expect(carousel.scrollFromRight === 0).to.be.false;
-            expect(carousel.index).to.equal(8);
-            expect(carousel.scrollLeft).to.equal(3022);
-        });
-
-        it('moves +2', function() {
-            carousel.index += 2;
-
-            expect(carousel.scrollFromLeft === 0).to.be.false;
-            expect(carousel.scrollFromRight === 0).to.be.true;
-            expect(carousel.index).to.equal(9);
-            expect(carousel.scrollLeft).to.equal(3400);
-        });
-
-        it('moves 0', function() {
-            carousel.index = 0;
-
-            expect(carousel.scrollFromLeft === 0).to.be.true;
-            expect(carousel.scrollFromRight === 0).to.be.false;
-            expect(carousel.index).to.equal(0);
-            expect(carousel.scrollLeft).to.equal(0);
+        it('the tabindex and aria-* attributes are correctly implemented', function() {
+            expect(tab.tab.getAttribute('aria-selected')).to.equal('true');
+            expect(tab.tabs[1].getAttribute('aria-selected')).to.equal(null);
+            expect(tab.panel.getAttribute('tabindex')).to.equal('-1');
+            expect(tab.panels[1].getAttribute('tabindex')).to.equal('-1');
         });
     });
 
-    context('Scroll', function() {
-        //Disable smooth
-        carousel.scrollBehavior = 'auto';
+    context('State', function() {
+        it('changes the current state', function() {
+            expect(tab.setState('#section2')).to.be.true;
 
-        it('goes to the beginning', function() {
-            carousel.scrollFromLeft = 0;
+            expect(tab.panel.id).to.equal('section2');
+            expect(tab.panels[1] === tab.panel).to.be.true;
+            expect(tab.tab.id).to.equal('tab2');
+            expect(tab.tabs[1] === tab.tab).to.be.true;
 
-            expect(carousel.scrollFromLeft === 0).to.be.true;
-            expect(carousel.scrollFromRight === 0).to.be.false;
-            expect(carousel.index).to.equal(0);
-        });
+            expect(tab.tab.getAttribute('aria-selected')).to.equal('true');
+            expect(tab.tabs[0].getAttribute('aria-selected')).to.equal(null);
 
-        it('goes to the end', function() {
-            carousel.scrollFromRight = 0;
-
-            expect(carousel.scrollFromLeft === 0).to.be.false;
-            expect(carousel.scrollFromRight === 0).to.be.true;
-            expect(carousel.index).to.equal(9);
-        });
-
-        it('scroll from left', function() {
-            carousel.scrollFromLeft = 400;
-
-            expect(carousel.scrollFromLeft).to.equal(400);
-            expect(carousel.scrollFromRight).to.equal(3000);
-            expect(carousel.index).to.equal(1);
-        });
-
-        it('advance scroll from left', function() {
-            carousel.scrollFromLeft += carousel.clientWidth;
-
-            expect(carousel.scrollFromLeft).to.equal(1000);
-            expect(carousel.scrollFromRight).to.equal(2400);
-            expect(carousel.index).to.equal(3);
-        });
-
-        it('scroll from right', function() {
-            carousel.scrollFromRight = 400;
-
-            expect(carousel.scrollFromLeft).to.equal(3000);
-            expect(carousel.scrollFromRight).to.equal(400);
-            expect(carousel.index).to.equal(8);
-        });
-    });
-
-    context('Player', function() {
-        const player = new Player(carousel);
-
-        it('default interval is 5000ms', function() {
-            expect(player.interval).to.equal(5000);
-        });
-
-        it('does not playing', function() {
-            expect(player.isPlaying).to.be.false;
-        });
-
-        it('default step is 1', function() {
-            expect(player.step).to.equal(1);
-        });
-
-        it('status is playing', function() {
-            player.play();
-            expect(player.isPlaying).to.be.true;
-        });
-
-        it('status is stopped', function() {
-            player.stop();
-            expect(player.isPlaying).to.be.false;
+            expect(tab.setState('#section1')).to.be.true;
         });
     });
 });

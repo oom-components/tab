@@ -5,18 +5,28 @@
     <title>Carousel tests</title>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/mocha/5.2.0/mocha.min.css">
     <style>
-        test-carousel {
-            display: flex;
-            overflow-x: auto;
-            width: 600px;
-            margin: auto;
+        section:not(:target) {
+            display: none;
         }
-        test-carousel > div {
-            width: 400px;
-            height: 400px;
-            flex: 0 0 auto;
+
+        :focus {
+            outline: dotted 2px #ddd;
+            outline-offset: 4px;
+        }
+
+        [role="tablist"] {
+            display: flex;
+            list-style: none;
+            padding: 0;
+        }
+        [role="tab"] {
+            display: block;
+            padding: 1em;
             background: #ddd;
-            outline: solid 1px #bbb;
+        }
+        [role="tab"][aria-selected="true"] {
+            background: black;
+            color: white;
         }
     </style>
 </head>
@@ -24,18 +34,28 @@
     <div id="mocha"></div>
 
     <div>
-        <test-carousel role="region" aria-label="Gallery" tabindex="0">
-            <div>0</div>
-            <div>1</div>
-            <div>2</div>
-            <div>3</div>
-            <div>4</div>
-            <div>5</div>
-            <div>6</div>
-            <div>7</div>
-            <div>8</div>
-            <div>9</div>
-        </test-carousel>
+        <test-tab role="region">
+            <ul role="tablist">
+                <li role="presentation">
+                    <a href="#section1" role="tab" id="tab1" aria-selected="true">
+                        Section 1
+                    </a>
+                </li>
+                <li role="presentation">
+                    <a href="#section2" role="tab" id="tab2">
+                        Section 2
+                    </a>
+                </li>
+            </ul>
+
+            <section id="section1" aria-labelledby="tab1" role="tabpanel">
+                Section 1
+            </section>
+
+            <section id="section2" aria-labelledby="tab2" role="tabpanel">
+                Section 2
+            </section>
+        </test-tab>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/5.2.0/mocha.min.js"></script>

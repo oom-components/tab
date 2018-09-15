@@ -13,6 +13,11 @@
             display: none;
         }
 
+        :focus {
+            outline: dotted 2px #ddd;
+            outline-offset: 4px;
+        }
+
         [role="tablist"] {
             display: flex;
             list-style: none;
@@ -37,7 +42,7 @@
         <oom-tab role="region">
             <ul role="tablist">
                 <li role="presentation">
-                    <a href="#section1" role="tab" id="tab1">
+                    <a href="#section1" role="tab" id="tab1" aria-selected="true">
                         Section 1
                     </a>
                 </li>
