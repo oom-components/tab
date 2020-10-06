@@ -115,8 +115,8 @@ console.log(element.tab);
 
 ## Demo and tests
 
-- Demo: https://oom-components.github.io/tab/demo
-- Tests: https://oom-components.github.io/tab/tests
+- Demo: https://oom-components.github.io/tab/demo/
+- Tests: https://oom-components.github.io/tab/tests/
 
 To run the demo locally, just clone this repository, enter in the directory and execute:
 
