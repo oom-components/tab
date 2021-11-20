@@ -99,7 +99,7 @@ function setTab(el, tab) {
   const id = hash.substr(1);
 
   el.panels.forEach(
-    (panel) => (panel.style.display = id === panel.id ? "block" : "none"),
+    (panel) => (panel.style.display = id === panel.id ? null : "none"),
   );
   history.replaceState({}, "", hash);
 }
