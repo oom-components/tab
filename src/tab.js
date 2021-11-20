@@ -79,11 +79,6 @@ function moveIndex(el, increment) {
   }
 }
 
-function setPanel(el, panel) {
-  const href = `#${panel.id}`;
-  setTab(el, el.tabs.find((tab) => tab.getAttribute("href") === href));
-}
-
 function setTab(el, tab) {
   const oldTab = el.tab;
 
@@ -157,7 +152,7 @@ function checkA11y(element) {
 
   if (!panels.length) {
     console.info(
-      "@oom/carusel [accesibility]:",
+      "@oom/tab [accesibility]:",
       'Missing role="tabpanel" elements',
     );
   }
@@ -165,7 +160,7 @@ function checkA11y(element) {
   panels.forEach((panel) => {
     if (!panel.hasAttribute("aria-labelledby")) {
       console.info(
-        "@oom/carusel [accesibility]:",
+        "@oom/tab [accesibility]:",
         `Missing aria-labelledby attribute in tabpanel "${panel.id}"`,
       );
     }
