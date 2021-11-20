@@ -2,25 +2,28 @@
 
 Tab panel component with the following features:
 
-* No dependencies
-* Light: Aprox 200 lines of code (including comments and spaces)
-* Follows the **progressive enhancement strategy:**
-  * Works with just `html`
-  * Works better with `html` and `css`
-  * Works much better with `html`, `css` and `js`
-  * Works much much better when `js` polyfills are not needed
-* No styles or themes are provided with this package. You decide how the tabs must look.
-* Support for touch devices
-* Support for keyboard
-* Fully accessible
-* Build with modern javascript, using ES6 modules and custom elements
+- No dependencies
+- Light: Aprox 200 lines of code (including comments and spaces)
+- Follows the **progressive enhancement strategy:**
+  - Works with just `html`
+  - Works better with `html` and `css`
+  - Works much better with `html`, `css` and `js`
+  - Works much much better when `js` polyfills are not needed
+- No styles or themes are provided with this package. You decide how the tabs
+  must look.
+- Support for touch devices
+- Support for keyboard
+- Fully accessible
+- Build with modern javascript, using ES6 modules and custom elements
 
 ## Install
 
 Requirements:
 
-* NPM or Yarn to install [the package](https://www.npmjs.com/package/@oom/tab)
-* For browsers [not supporting custom elements](https://caniuse.com/#feat=custom-elementsv1), [you can use this polyfill](https://github.com/webcomponents/custom-elements)
+- NPM or Yarn to install [the package](https://www.npmjs.com/package/@oom/tab)
+- For browsers
+  [not supporting custom elements](https://caniuse.com/#feat=custom-elementsv1),
+  [you can use this polyfill](https://github.com/webcomponents/custom-elements)
 
 ```sh
 npm install @oom/tab
@@ -89,22 +92,23 @@ section:not(:target) {
 And finally use javascript for a complete experience:
 
 ```js
-import Tab from './tab/tab.js';
+import Tab from "./tab/tab.js";
 
 //Register the custom element
-customElements.define('my-tabs', Tab);
+customElements.define("my-tabs", Tab);
 ```
 
 ## API
 
-This is a custom element that extends `HtmlElement`, so it innerit the same api of a standard html element with the following additions:
+This is a custom element that extends `HtmlElement`, so it innerit the same api
+of a standard html element with the following additions:
 
 ```js
 //Select the element
-const element = document.querySelector('my-tabs');
+const element = document.querySelector("my-tabs");
 
 //Change the tab state
-element.setState('#section2');
+element.setState("#section2");
 
 //Get the currently selected tabpanel element
 console.log(element.panel);
@@ -118,7 +122,8 @@ console.log(element.tab);
 - Demo: https://oom-components.github.io/tab/demo/
 - Tests: https://oom-components.github.io/tab/tests/
 
-To run the demo locally, just clone this repository, enter in the directory and execute:
+To run the demo locally, just clone this repository, enter in the directory and
+execute:
 
 ```sh
 npm install

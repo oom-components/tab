@@ -1,3 +1,3 @@
-import Tab from '../src/tab.js';
+import Tab from "../src/tab.js";
 
-customElements.define('oom-tab', Tab);
+customElements.define("oom-tab", Tab);
