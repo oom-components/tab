@@ -41,13 +41,13 @@ export default class Tab extends HTMLElement {
       });
     });
 
-    window.addEventListener(
+    addEventListener(
       "popstate",
       () => setByHash(this, document.location.hash),
     );
 
     if (!setByHash(this, document.location.hash)) {
-      setTab(this, this.tab);
+      setTab(this, this.tab, false);
     }
   }
 
@@ -64,6 +64,8 @@ export default class Tab extends HTMLElement {
       const id = tab.getAttribute("href").substr(1);
       return this.panels.find((panel) => panel.id === id);
     }
+
+    return null;
   }
 
   setState(hash) {
@@ -79,7 +81,7 @@ function moveIndex(el, increment) {
   }
 }
 
-function setTab(el, tab) {
+function setTab(el, tab, changeHistory = true) {
   const oldTab = el.tab;
 
   if (oldTab) {
@@ -101,14 +103,17 @@ function setTab(el, tab) {
   el.panels.forEach(
     (panel) => (panel.style.display = id === panel.id ? null : "none"),
   );
-  history.replaceState({}, "", hash);
+
+  if (changeHistory) {
+    history.replaceState({}, "", hash);
+  }
 }
 
 function setByHash(el, hash) {
   const tab = el.tabs.find((tab) => tab.getAttribute("href") === hash);
 
   if (tab) {
-    setTab(el, tab);
+    setTab(el, tab, false);
     return true;
   }
 }
