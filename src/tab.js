@@ -1,4 +1,6 @@
 export default class Tab extends HTMLElement {
+  static changeHistory = true;
+
   connectedCallback() {
     checkA11y(this);
 
@@ -8,17 +10,17 @@ export default class Tab extends HTMLElement {
     this.tabs.forEach((tab) => {
       tab.addEventListener("click", (e) => {
         e.preventDefault();
-        setTab(this, tab);
+        setTab(this, tab, Tab.changeHistory);
       });
 
       tab.addEventListener("keydown", (e) => {
         switch (e.which) {
           case 37: //left
-            moveIndex(this, -1);
+            moveIndex(this, -1, Tab.changeHistory);
             break;
 
           case 39: //right
-            moveIndex(this, 1);
+            moveIndex(this, 1, Tab.changeHistory);
             break;
 
           case 40: //down
@@ -43,7 +45,7 @@ export default class Tab extends HTMLElement {
 
     addEventListener(
       "popstate",
-      () => setByHash(this, document.location.hash),
+      () => setByHash(this, document.location.hash, Tab.changeHistory),
     );
 
     if (!setByHash(this, document.location.hash)) {
@@ -73,11 +75,11 @@ export default class Tab extends HTMLElement {
   }
 }
 
-function moveIndex(el, increment) {
+function moveIndex(el, increment, changeHistory = true) {
   const index = el.tabs.indexOf(el.tab) + increment;
 
   if (el.tabs[index]) {
-    setTab(el, el.tabs[index]);
+    setTab(el, el.tabs[index], changeHistory);
   }
 }
 

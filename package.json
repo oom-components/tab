@@ -1,6 +1,6 @@
 {
   "name": "@oom/tab",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Tab panel with progressive enhancement in mind",
   "browser": "src/tab.js",
   "modules.root": "src",
