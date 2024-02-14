@@ -49,7 +49,7 @@ export default class Tab extends HTMLElement {
     );
 
     if (!setByHash(this, document.location.hash)) {
-      setTab(this, this.tab, false);
+      setTab(this, this.tab, false, false);
     }
   }
 
@@ -83,7 +83,7 @@ function moveIndex(el, increment, changeHistory = true) {
   }
 }
 
-function setTab(el, tab, changeHistory = true) {
+function setTab(el, tab, changeHistory = true, autofocus = true) {
   const oldTab = el.tab;
 
   if (oldTab) {
@@ -95,7 +95,9 @@ function setTab(el, tab, changeHistory = true) {
     return;
   }
 
-  tab.focus();
+  if (autofocus) {
+    tab.focus();
+  }
   tab.removeAttribute("tabindex");
   tab.setAttribute("aria-selected", "true");
 
